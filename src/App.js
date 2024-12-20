@@ -1,103 +1,81 @@
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-// //import './App.css'
-// import React,{useState} from "react"
-// function App()
-// {
-//   let[counter,updateCounter]=useState(0)
-//   return (
-//     <>
-//     <p>this is p tag </p>
-//     <h1>this h tag</h1>
-//     <h1>counter value: {counter}</h1>
-//     <button on onClick={()=>
-//       {
-//         updateCounter(++counter)
-//       }}>change</button>
-
-//     <button on onClick={()=>
-//       {
-//         updateCounter(--counter)
-//       }}>change</button>
-//     </>
-    
-//     )
-// }
-// export default App;
-
-//color changer
-
-// import './App.css'
-// function App()
-// {
-//   return (
-//     <div className="Wrapper">
-//       <h1>background color changer using react</h1>
-//       <input type="color" onChange={
-//         (e)=>
-//         {
-//           document.body.style.background=e.target.value
-//         }
-//       }/>
-//     </div>
-// )
-// }
-
-// export default App;
-
-import './App.css';
-import {useState} from 'react';
+import { useState } from 'react'
+import './App.css'
 function App()
 {
-  let [counter,setCounter]=useState(0)
-  let stock=10
+  let [todoInput,UpdateInput] = useState("")
+  let [todoList,updatetodos] = useState(
+    [
+    {
+      id:1,
+      task:'learn react'
+    },
+    {
+      id:2,
+      task:'learn Angular'
+    }
+
+  ]
+  )
+  let nextid=3
+  function addNewTodo(){
+    if(todoInput === "")
+      alert("Add some task") 
+    else{
+     let newTodos=[
+        ...todoList,{
+          id : nextid++,
+          task:todoInput
+        }
+      ]
+      updatetodos(newTodos)
+      UpdateInput("")
+    } 
+   
+  }
+
+  function deletetodo(id)
+  {
+    let updatedtodos=todoList.filter(
+      (todo)=>{
+        return todo.id!==id
+      }
+    )
+    updatetodos(updatedtodos)
+  }
   return(
-    <>
-    <h1>
-      counter app in react
-    </h1>
-    <div className="Wrapper">
-    <button className='plus' disabled={counter===stock} onClick={ ()=>{
-        if(counter<stock)
-        {
-          setCounter(counter+1);
-          // console.log(counter);
-        }
-      }
-    }>+</button>
-    <p>{counter}</p>
-    <button className='minus' disabled={counter===0} onClick={ ()=>{
-        if(counter>0)
-        {
-          setCounter(counter-1);
-        }
-      }
-    }>-</button>
+    <div className="container mt-5 w-50">
+      <h1 className='text-center '>Todo App using React </h1>
+        <div className="input-group">
+          <input className="form-control" onChange={
+            (e)=>{
+              let task=e.target.value;
+              UpdateInput(task)
+            }
+          } type="text" value={todoInput} />
+          <button onClick={ ()=>{
+            addNewTodo()
+          }
+
+          } className="btn btn-primary">Add</button>
+        </div>
+        <ul className="list-group mt-4">
+          {
+              todoList.map(
+                (todo) => {
+                  return(
+                    <li className="list-group-item"><p>{todo.task}</p>
+                    <button onClick={
+                      ()=>{
+                        deletetodo(todo.id)
+                      }
+                    } className="btn">X</button></li>
+         
+                  )
+                }
+              )
+            }
+       </ul>
     </div>
-    </>
   )
 }
-export default App;
+export  default App
